@@ -8,5 +8,13 @@ pipeline {
         url: 'https://github.com/mrasuli/mongo_spartan.git'
       }
     }
+
+    stage('Build Docker Image') {
+      steps{
+      script {
+        docker.build '0771637/mongo_spartan'
+      }
+      }
+    }
   }
 }

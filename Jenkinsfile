@@ -3,6 +3,7 @@ pipeline {
 
   environment {
   IMAGE_NAME = '0771637/mongo_spartan:1.' + "$BUILD_NUMBER"
+  DOCKER_CREDNETIALS = "docker_hub_cred"
   }
 
   stages {

@@ -19,6 +19,16 @@ pipeline {
     }
   }
 
+    stage('Testing the code'){
+      steps{
+        script {
+          sh '''
+            docker run $IMAGE_NAME pytest
+          '''
+        }
+      }
+    }
+
     stage('Build Docker Image') {
       steps{
       script {

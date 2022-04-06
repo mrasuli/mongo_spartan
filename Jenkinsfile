@@ -19,40 +19,43 @@ pipeline {
     }
   }
 
-    stage('Testing the code'){
-      steps{
+    stage('Build Docker image') {
+      steps {
         script {
-          sh '''
-            docker run --rm -v $PWD/test-results:/reports --workdir /app $IMAGE_NAME pytest -v --junitxml=/reports/results.xml
-          '''
-        }
-      }
-      post {
-        always {
-          junit testResults: '**/test-results/*.xml'
+          DOCKER_IMAGE = docker.build IMAGE_NAME
         }
       }
     }
 
-    stage('Build Docker Image') {
+    stage('Testing the Code') {
       steps{
-      script {
-        DOCKER_IMAGE = docker.build IMAGE_NAME
+        script {
+          sh '''
+            docker run -v $PWD/test-results:/reports --workdir /app --rm $IMAGE_NAME pytest -v --junitxml=/reports/results.xml
+          '''
+          }
+        }
+
+        post {
+          always {
+            junit testResults: '**/test-results/*.xml'
+          }
+        }
       }
-      }
-    }
-    stage("Push to Docker Hub"){
+
+    stage('Push to dockerhub'){
       steps {
         script {
-          docker.withRegistry('', 'docker_hub_cred'){
+          docker.withRegistry('',DOCKER_CREDENTIALS){
             DOCKER_IMAGE.push()
           }
         }
       }
     }
+
     stage('Removing the Docker Image'){
-      steps {
-        sh "docker rmi $IMAGE_NAME"
+     steps {
+      sh "docker rmi $IMAGE_NAME"
       }
     }
   }

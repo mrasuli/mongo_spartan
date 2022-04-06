@@ -54,7 +54,6 @@ def get_spartan(spartan_id):
     load_jsonfile()
     spartan = all_spartans_dict[int(spartan_id)]
     return spartan
- # try and add try and aceept to catch errors
 
 
 def remove_spartan(spartan_id):

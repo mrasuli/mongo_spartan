@@ -37,5 +37,3 @@ pipeline {
     }
   }
 }
-
-added new line

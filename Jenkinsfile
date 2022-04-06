@@ -7,12 +7,17 @@ pipeline {
   }
 
   stages {
-    stage('Cloning the project from GitHub'){
-      steps {
-        git branch: 'main',
-        url: 'https://github.com/mrasuli/mongo_spartan.git'
-      }
+  stage('Cloning the project from GitHub'){
+    steps {
+      checkout([
+          $class: 'GitSCM', branches: [[name: '*/main']],
+          serRemoteConfigs: [[
+            url: 'git@github.com:mrasuli/mongo_spartan.git',
+            credentialsId: 'ssh_git_cred'
+          ]]
+        ])
     }
+  }
 
     stage('Build Docker Image') {
       steps{

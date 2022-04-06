@@ -12,8 +12,17 @@ pipeline {
     stage('Build Docker Image') {
       steps{
       script {
-        docker.build '0771637/mongo_spartan'
+        DOCKER_IMAGE = docker.build '0771637/mongo_spartan'
       }
+      }
+    }
+    stage("Push to Docker Hub"){
+      steps {
+        script {
+          docker.withRegistry('', 'docker_hub_cred'){
+            DOCKER_IMAGE.push()
+          }
+        }
       }
     }
   }
